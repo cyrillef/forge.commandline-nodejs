@@ -1,0 +1,63 @@
+{
+  "name": "forge.commandline-nodejs",
+  "version": "3.0.0",
+  "description": "Node.js command line tool demonstrating the Forge API",
+  "keywords": [
+    "Autodesk",
+    "Forge",
+    "Model Derivative",
+    "Viewer",
+    "Bubble",
+    "OTG",
+    "BIM360",
+    "command line",
+    "tool"
+  ],
+  "homepage": "https://forge.autodesk.com/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/autodesk-forge/forge.commandline-nodejs"
+  },
+  "bugs": {
+    "url": "https://github.com/autodesk-forge/forge.commandline-nodejs/issues"
+  },
+  "author": "Cyrille Fauvel <cyrille@autodesk.com>",
+  "contributors": [
+    "Cyrille Fauvel <cyrille@autodesk.com>"
+  ],
+  "license": "MIT",
+  "engines": {
+    "node": ">= 9.5.0",
+    "npm": ">= 6.0.0"
+  },
+  "cacheDirectories": [
+    "node_modules"
+  ],
+  "main": "forge.js",
+  "scripts": {
+    "test": "./node_modules/mocha/bin/mocha --recursive"
+  },
+  "dependencies": {
+    "archiver": "^4.0.2",
+    "commander": "^5.1.0",
+    "ejs": "^3.1.5",
+    "forge-apis": "^0.9.10",
+    "forge-server-utils": "^8.1.7",
+    "jsonwebtoken": "^8.5.1",
+    "jwks-rsa": "^2.0.3",
+    "mkdirp": "^1.0.4",
+    "moment": "^2.29.1",
+    "node-zip": "^1.1.1",
+    "open": "^8.2.1",
+    "promises-all-limit": "^1.0.2",
+    "rimraf": "^3.0.2",
+    "unirest": "^0.6.0",
+    "uuid": "^8.3.1"
+  },
+  "devDependencies": {
+    "eslint": "^7.13.0"
+  },
+  "prettier": {
+    "singleQuote": true
+  }
+}

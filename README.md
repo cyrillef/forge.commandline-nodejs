@@ -1,0 +1,199 @@
+
+[![Node.js](https://img.shields.io/badge/Node.js-10.16.0-blue.svg)](https://nodejs.org/)
+![Platforms](https://img.shields.io/badge/platform-windows%20%7C%20osx%20%7C%20linux-lightgray.svg)
+[![License](http://img.shields.io/:license-mit-blue.svg)](http://opensource.org/licenses/MIT)
+
+[![oAuth2](https://img.shields.io/badge/oAuth2-v1-green.svg)](http://developer-autodesk.github.io/)
+[![Data-Management](https://img.shields.io/badge/Data%20Management-v1-green.svg)](http://developer-autodesk.github.io/)
+[![OSS](https://img.shields.io/badge/OSS-v2-green.svg)](http://developer-autodesk.github.io/)
+[![Model-Derivative](https://img.shields.io/badge/Model%20Derivative-v2-green.svg)](http://developer-autodesk.github.io/)
+[![Viewer](https://img.shields.io/badge/Forge%20Viewer-v7.3-green.svg)](http://developer-autodesk.github.io/)
+
+# forge.commandline-nodejs
+
+<b>Note:</b> For using this sample, you need a valid oAuth credential.
+Visit this [page](https://forge.autodesk.com) for instructions to get on-board.
+
+
+## Description
+
+This sample exercises the Node.js engine as a command line utility to  demonstrate the Forge OAuth application authorisation process and most of the Forge Services API such as Model Derivative, Bim360, Viewer, ...
+
+Demonstrates the use of the Autodesk Forge API using a Node.js console application. Supports both 2 legged and 3 legged protocols.
+
+## Prerequisites
+
+1. **Forge Account**: Learn how to create a Forge Account, activate subscription and create an app at [this tutorial](http://learnforge.autodesk.io/#/account/).
+2. **Visual Studio Code**: other text editors could be used too, but Visual Studio Code is a widely used editor, see [https://code.visualstudio.com/](https://code.visualstudio.com/).
+3. **Node.js**: basic knowledge of Node.js, see [https://nodejs.org/en/](https://nodejs.org/en/).
+4. **JavaScript**: basic knowledge.
+5. If you want to use the BIM360 API - **BIM 360 or other Autodesk storage account**: if you want to use it with files from BIM 360 Docs then you must be an Account Admin to add the app integration. [Learn about provisioning](https://forge.autodesk.com/blog/bim-360-docs-provisioning-forge-apps).
+
+## Setup/Usage Instructions
+
+  1. Install [NodeJS](https://nodejs.org)
+  2. Download (fork, or clone) this project
+  3. Install Node.js dependency modules:<br />
+     ```
+     npm install
+     ```
+  4. Request your consumer key/secret key from [https://forge.autodesk.com](https://forge.autodesk.com).
+  5. Set 2 environment variables FORGE_CLIENT_ID / FORGE_CLIENT_SECRET<br />
+  Mac OSX/Linux (Terminal)
+     ```
+     export FORGE_CLIENT_ID=<<YOUR FORGE CLIENT ID>>
+     export FORGE_CLIENT_SECRET=<<YOUR FORGE CLIENT SECRET>>
+     ```
+     Windows (use <b>Node.js command line</b> from Start menu)
+     ```
+     set FORGE_CLIENT_ID=<<YOUR FORGE CLIENT ID>>
+     set FORGE_CLIENT_SECRET=<<YOUR FORGE CLIENT SECRET>>
+     ```
+
+     If you only want to use Model Derivative, Data Management/OSS, Design Automation, Reality Capture - you can stop here
+
+  6. Set an environment variable PORT (This is for running either BIM360 API or the Viewer)<br />
+  Mac OSX/Linux (Terminal)
+     ```
+     export PORT=<<YOUR PORT NUMBER>>
+     ```
+     Windows (use <b>Node.js command line</b> from Start menu)
+     ```
+     set PORT=<<YOUR PORT NUMBER>>
+     ```
+  7. **Note** for the 3 legged commands: while registering your keys, make sure that the callback you define for your
+     callback (or redirect_uri) match your localhost and PORT number.
+     Default is : http://localhost:3006/oauth
+  Mac OSX/Linux (Terminal)
+     ```
+     export FORGE_CALLBACK=<<YOUR FORGE CALLBACK URL>>
+     ```
+     Windows (use <b>Node.js command line</b> from Start menu)
+     ```
+     set FORGE_CALLBACK=<<YOUR FORGE CALLBACK URL>>
+     ```
+   8. Provision your application key on the BIM360 application integration page. [Learn about provisioning](https://forge.autodesk.com/blog/bim-360-docs-provisioning-forge-apps).
+
+**Note**: If you do not want to set environement variables, edit the forge.js file and replace the placeholders by the values listed above.
+
+## Usage
+
+The utility provides help information for the commands and arguments. Use the --help option to access it.
+
+Here are few examples (click &#9658; to expand):
+
+<details>
+   <summary>oAuth (2 legged) + DM/OSS + Model Derivative</summary>
+
+   ```bash
+   # Do authorization.
+   node forge.js 2legged
+
+   # Create a bucket. Bucket name must be lower case and valid characters.
+   node forge.js buckets-new my_bucket_name
+
+   # Upload a model.
+   node forge.js objects-put Au.obj
+
+   # Register the model to get it translated.
+   node forge.js objects-translate Au.obj
+
+   # Wait until the translation completes.
+   # Translation is complete when it reaches 'success - 100%'
+   node forge.js objects-progress Au.obj
+
+   # Create an HTML page with your URN and a read-only access token to view the SVF.
+   node forge.js html urn:adsk.objects:os.object:my_bucket_name/Au.obj ./bubbles/Au.obj.html
+
+   # Create an HTML page with your URN and a read-only access token to view the SVF2 version.
+   node forge.js html urn:adsk.objects:os.object:my_bucket_name/Au.obj ./bubbles/Au.obj.html --svf2
+
+   # Start local server and load the HTML page.
+   open http://localhost:$PORT/Au.obj.html & http-server ./bubbles/
+   ```
+
+</details>
+
+<details>
+   <summary>oAuth (3 legged) + DM/BIM360</summary>
+
+   ```bash
+   # Do authorization/authentication.
+   node forge.js 3legged auto
+
+   # Get the list of Hubs.
+   node forge.js hubs
+
+   # Get the list of projects.
+   node forge.js projects $hubid
+
+   # Get the entire project data tree.
+   node forge.js projects-tree $hubid $projectid -f
+
+   # Refresh the access token
+   node forge.js 3legged-refresh
+
+   # Create an HTML page with your URN and a read-only access token to view the SVF.
+   node forge.js html $versionid ./bubbles/output.html
+
+   # Create an HTML page with your URN and a read-only access token to view the SVF2 version.
+   node forge.js html $versionid ./bubbles/output.html --svf2
+
+   # Start local server and load the HTML page.
+   open http://localhost:$PORT/Au.obj.html & http-server ./bubbles/
+   ```
+
+</details>
+
+<br />
+Note your access token, bucket name and other information are saved in the data folder to be used as default values by the utility, but you can
+edit them as you wish.
+
+
+## SVF2 precision
+
+SVF2 (centered at the origin) can theoretically measure a 20km stretch at 4.6 micron precision, which is just equivalent to the limit of 32 bit float precision. Currently, SVF2 uses a single double precision offset for each model.
+
+Linear designs or geospatial models are yet to be validated with SVF2. We are looking for feedback.
+
+---
+
+# Further reading
+
+Documentation:
+
+- [BIM 360 API](https://developer.autodesk.com/en/docs/bim360/v1/overview/) and [App Provisioning](https://forge.autodesk.com/blog/bim-360-docs-provisioning-forge-apps)
+- [Data Management API](https://developer.autodesk.com/en/docs/data/v2/overview/)
+- [Viewer](https://developer.autodesk.com/en/docs/viewer/v6)
+
+Tutorials:
+
+- [View BIM 360 Models](http://learnforge.autodesk.io/#/tutorials/viewhubmodels)
+- [Retrieve Issues](https://developer.autodesk.com/en/docs/bim360/v1/tutorials/retrieve-issues)
+
+Blogs:
+
+- [Forge Blog](https://forge.autodesk.com/categories/bim-360-api)
+- [Field of View](https://fieldofviewblog.wordpress.com/), a BIM focused blog
+
+SVF2:
+
+* [Load SVF2 with ForgeViewer sample](https://github.com/wallabyway/OTG-client-sample)
+
+![thumbnail](/thumbnail.png)
+
+## License
+
+This sample is licensed under the terms of the [MIT License](http://opensource.org/licenses/MIT).
+Please see the [LICENSE](LICENSE) file for full details.
+
+## Written by
+
+Cyrille Fauvel <br />
+Forge Partner Development <br />
+http://developer.autodesk.com/ <br />
+http://around-the-corner.typepad.com <br />
+
+
+### Thumbnail
+![thumbnail](img/thumbnail_default.png)
